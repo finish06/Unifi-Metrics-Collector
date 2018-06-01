@@ -102,3 +102,19 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+#Default ignores
+*.pid
+*.xml
+*.csr
+*.crt
+*.key
+*.db
+*.png
+pyvenv.cfg
+pip-selfcheck.json
+
+#Ignore venv items
+Include/
+Lib/
+Scripts/
