@@ -178,7 +178,7 @@ def run():
                                          {'device': device, 'port': port},
                                          {'tx-bytes': value})
             except Exception as err:
-                logger.error(device.capitalize() + ' rx/tx error: ' % err)
+                logger.error(device.capitalize() + ' rx/tx error: ' + str(err))
         end_time = time.time()
         logger.debug('total time for this loop: ' +
                      str(end_time - start_time)[0:3] +
