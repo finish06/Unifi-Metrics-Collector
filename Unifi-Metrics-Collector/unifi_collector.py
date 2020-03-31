@@ -112,7 +112,7 @@ def run():
                                                 unifi_parm['username'],
                                                 unifi_parm['password'],
                                                 site_id=unifi_parm['site_id'],
-                                                version='v4',
+                                                version=unifi_parm['version'],
                                                 ssl_verify=ssl))
     except Exception as err:
         logger.error('Unifi Controller error: ' % err)
