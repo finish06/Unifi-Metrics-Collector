@@ -174,6 +174,7 @@ def run():
             logger.debug(stats)
             try:
                 if stats['sw']:
+                    # 'sw' == switch, 'ap' == access point, etc.
                     fields = {}
                     for port, value in stats['sw'].items():
                         fields[port] = value
