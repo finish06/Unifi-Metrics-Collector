@@ -108,7 +108,14 @@ def run():
             ssl = True
         else:
             ssl = False
-        unifi_obj = unifi(controller.Controller(unifi_parm['url'],
+        if unifi_parm['version'] == "unifiOS":
+            unifi_obj = unifi(controller.Controller(unifi_parm['url'],
+                                                unifi_parm['username'],
+                                                unifi_parm['password'],
+                                                version=unifi_parm['version'],
+                                                ssl_verify=ssl))
+        else:
+            unifi_obj = unifi(controller.Controller(unifi_parm['url'],
                                                 unifi_parm['username'],
                                                 unifi_parm['password'],
                                                 site_id=unifi_parm['site_id'],
@@ -165,18 +172,15 @@ def run():
         for device, stats in device_metrics.items():
             logger.info('Pushing "' + device + '" data to Influx')
             logger.debug(stats)
-            influx_obj.send_data('{0}'.format(device),
-                                 {'device': device, 'data': 'all'},
-                                 stats[0])
             try:
-                for port, value in stats[1].items():
-                    influx_obj.send_data('unifi',
-                                         {'device': device, 'port': port},
-                                         {'rx-bytes': value})
-                for port, value in stats[2].items():
-                    influx_obj.send_data('unifi',
-                                         {'device': device, 'port': port},
-                                         {'tx-bytes': value})
+                if stats['sw']:
+                    fields = {}
+                    for port, value in stats['sw'].items():
+                        fields[port] = value
+                    logger.info(fields)
+                    influx_obj.send_data(device,
+                                        {'device_type': 'switch'},
+                                        fields)
             except Exception as err:
                 logger.error(device.capitalize() + ' rx/tx error: ' + str(err))
         end_time = time.time()
